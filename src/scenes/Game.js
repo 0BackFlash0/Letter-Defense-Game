@@ -1,28 +1,40 @@
-import { Scene } from 'phaser';
+import { Scene } from "phaser";
 
-export class Game extends Scene
-{
-    constructor ()
-    {
-        super('Game');
+export class Game extends Scene {
+    constructor() {
+        super("Game");
+
+        this.input_box = null;
+        this.input_Element = null;
     }
 
-    create ()
-    {
-        this.cameras.main.setBackgroundColor(0x00ff00);
+    preload() {
+        this.load.image("background", "./assets/Background.png");
+        this.load.image("text_input", "./assets/Text Input.png");
+    }
 
-        this.add.image(512, 384, 'background').setAlpha(0.5);
+    create() {
+        this.add.image(0, 0, "background").setOrigin(0);
+        this.createUI();
+    }
 
-        this.add.text(512, 384, 'Make something fun!\nand share it with us:\nsupport@phaser.io', {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        }).setOrigin(0.5);
+    update() {
+        // console.log(this.inputElement.node.value);
+    }
 
-        this.input.once('pointerdown', () => {
-
-            this.scene.start('GameOver');
-
-        });
+    createUI() {
+        this.input_box = this.add.image(800, 960, "text_input").setOrigin(0);
+        this.inputElement = this.add
+            .dom(
+                800,
+                960,
+                "input",
+                'width: 393px; height: 96px; background: transparent; border: 0px; outline-width: 0;\
+                font-size: 40px; line-height: 96px; padding: 0px 20px; font-family: "Jua", sans-serif;\
+                font-weight: 400; font-style: normal; color:#FFFFFF; ',
+                "Phaser"
+            )
+            .setOrigin(0);
+        this.inputElement.node.type = "text";
     }
 }
