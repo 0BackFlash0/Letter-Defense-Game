@@ -1,11 +1,5 @@
 import { Scene } from "phaser";
-
-const ENEMYS = ["Big Demon", "Big Zombie", "Chort", "Goblin", "Ice Zombie", 
-                "Imp", "Lizard", "Mask Orc", "Muddy", "Ogre", "Orc Shaman",
-                "Orc Warrior", "Pumpkin Dude", "Skeleton", "Slug", "Swampy", "Tiny Slug"];
-
-const COMPANIONS = ["Angle", "Elf", "Knight", "Wizard"];
-
+import EnemyManager from "../object/EnemyManager.js";
 
 export class Game extends Scene {
     constructor() {
@@ -13,40 +7,33 @@ export class Game extends Scene {
 
         this.input_box = null;
         this.input_Element = null;
+
+        this.image_info = null;
+
+        this.enemyManager = null;
     }
 
-    preload() {
-        this.load.image("background", "./assets/Background.png");
-        this.load.image("text_input", "./assets/Text Input.png");
-    }
+    preload() {}
 
     create() {
         this.add.image(0, 0, "background").setOrigin(0);
         this.createUI();
+
+        this.enemyManager = new EnemyManager(this);
+        this.enemyManager.initializeEnemy();
+
+        this.enemyManager.generateEnemy("안녕하세요");
+
+        console.log(this);
     }
 
     update() {
+        if (this.enemyManager) this.enemyManager.update();
         // console.log(this.inputElement.node.value);
     }
 
-    loadEnemys(){
-        ENEMYS.forEach(enemy => {
-            this.load.spritesheet(enemy, `./assets/${enemy}.png`, {
-    
-            })
-
-        })
-    }
-
-    createAnims(){
-        this.anims.create({
-            key: "enemy_imp",
-
-        })
-    }
-
     createUI() {
-        this.input_box = this.add.image(800, 960, "text_input").setOrigin(0);
+        this.input_box = this.add.image(800, 960, "text input").setOrigin(0);
         this.inputElement = this.add
             .dom(
                 800,
@@ -59,5 +46,12 @@ export class Game extends Scene {
             )
             .setOrigin(0);
         this.inputElement.node.type = "text";
+
+        this.inputElement.node.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                this.enemyManager.checkInput(this.inputElement.node.value);
+                this.inputElement.node.value = "";
+            }
+        });
     }
 }

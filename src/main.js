@@ -11,6 +11,10 @@ const config = {
     width: 1920,
     height: 1080,
     parent: "game-container",
+    physics: {
+        debug: true,
+        default: "arcade",
+    },
     dom: {
         createContainer: true,
     },
@@ -22,8 +26,8 @@ const config = {
         // autoCenter: Phaser.Scale.CENTER_BOTH,
     },
     scene: [
-        // Boot,
-        // Preloader,
+        Boot,
+        Preloader,
         // MainMenu,
         Game,
         GameOver,
