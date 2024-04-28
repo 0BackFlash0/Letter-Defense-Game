@@ -1,5 +1,12 @@
 import { Scene } from "phaser";
 
+const ENEMYS = ["Big Demon", "Big Zombie", "Chort", "Goblin", "Ice Zombie", 
+                "Imp", "Lizard", "Mask Orc", "Muddy", "Ogre", "Orc Shaman",
+                "Orc Warrior", "Pumpkin Dude", "Skeleton", "Slug", "Swampy", "Tiny Slug"];
+
+const COMPANIONS = ["Angle", "Elf", "Knight", "Wizard"];
+
+
 export class Game extends Scene {
     constructor() {
         super("Game");
@@ -20,6 +27,22 @@ export class Game extends Scene {
 
     update() {
         // console.log(this.inputElement.node.value);
+    }
+
+    loadEnemys(){
+        ENEMYS.forEach(enemy => {
+            this.load.spritesheet(enemy, `./assets/${enemy}.png`, {
+    
+            })
+
+        })
+    }
+
+    createAnims(){
+        this.anims.create({
+            key: "enemy_imp",
+
+        })
     }
 
     createUI() {
