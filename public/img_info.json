@@ -1,1 +1,42 @@
-{"enemy": {"Big Demon": {"frame_width": 32, "frame_height": 36}, "Big Zombie": {"frame_width": 32, "frame_height": 36}, "Chort": {"frame_width": 16, "frame_height": 23}, "Goblin": {"frame_width": 16, "frame_height": 16}, "Ice Zombie": {"frame_width": 16, "frame_height": 16}, "Imp": {"frame_width": 16, "frame_height": 16}, "Lizard": {"frame_width": 16, "frame_height": 28}, "Mask Orc": {"frame_width": 16, "frame_height": 23}, "Muddy": {"frame_width": 16, "frame_height": 16}, "Ogre": {"frame_width": 32, "frame_height": 36}, "Orc Shaman": {"frame_width": 16, "frame_height": 23}, "Orc Warrior": {"frame_width": 16, "frame_height": 23}, "Pumpkin Dude": {"frame_width": 16, "frame_height": 23}, "Skeleton": {"frame_width": 16, "frame_height": 16}, "Slug": {"frame_width": 16, "frame_height": 23}, "Swampy": {"frame_width": 16, "frame_height": 16}, "Tiny Slug": {"frame_width": 16, "frame_height": 16}}, "companion": {"Angel": {"frame_width": 16, "frame_height": 16}, "Elf": {"frame_width": 16, "frame_height": 28}, "Knight": {"frame_width": 16, "frame_height": 28}, "Wizard": {"frame_width": 16, "frame_height": 28}}, "button": {"Book Button": {"frame_width": 18, "frame_height": 18}, "Continue Button": {"frame_width": 22, "frame_height": 22}, "Pause Button": {"frame_width": 22, "frame_height": 22}, "Quit Button": {"frame_width": 22, "frame_height": 22}, "Restart Button": {"frame_width": 22, "frame_height": 22}}, "heart": {"Companion Heal": {"frame_width": 23, "frame_height": 10}, "Enemy Hurt": {"frame_width": 23, "frame_height": 10}, "Player Heal": {"frame_width": 23, "frame_height": 10}, "Player Hurt": {"frame_width": 23, "frame_height": 10}}, "Player": {"frame_width": 64, "frame_height": 64}, "Word Panel": {"frame_width": 34, "frame_height": 18}}
+{
+    "enemy": {
+        "Big Demon": { "frame_width": 32, "frame_height": 36 },
+        "Big Zombie": { "frame_width": 32, "frame_height": 36 },
+        "Chort": { "frame_width": 16, "frame_height": 23 },
+        "Goblin": { "frame_width": 16, "frame_height": 16 },
+        "Ice Zombie": { "frame_width": 16, "frame_height": 16 },
+        "Imp": { "frame_width": 16, "frame_height": 16 },
+        "Lizard": { "frame_width": 16, "frame_height": 28 },
+        "Mask Orc": { "frame_width": 16, "frame_height": 23 },
+        "Muddy": { "frame_width": 16, "frame_height": 16 },
+        "Ogre": { "frame_width": 32, "frame_height": 36 },
+        "Orc Shaman": { "frame_width": 16, "frame_height": 23 },
+        "Orc Warrior": { "frame_width": 16, "frame_height": 23 },
+        "Pumpkin Dude": { "frame_width": 16, "frame_height": 23 },
+        "Skeleton": { "frame_width": 16, "frame_height": 16 },
+        "Slug": { "frame_width": 16, "frame_height": 23 },
+        "Swampy": { "frame_width": 16, "frame_height": 16 },
+        "Tiny Slug": { "frame_width": 16, "frame_height": 16 }
+    },
+    "companion": {
+        "Angel": { "frame_width": 16, "frame_height": 16 },
+        "Elf": { "frame_width": 16, "frame_height": 28 },
+        "Knight": { "frame_width": 16, "frame_height": 28 },
+        "Wizard": { "frame_width": 16, "frame_height": 28 }
+    },
+    "button": {
+        "Book Button": { "frame_width": 18, "frame_height": 18 },
+        "Continue Button": { "frame_width": 22, "frame_height": 22 },
+        "Pause Button": { "frame_width": 22, "frame_height": 22 },
+        "Quit Button": { "frame_width": 22, "frame_height": 22 },
+        "Restart Button": { "frame_width": 22, "frame_height": 22 }
+    },
+    "heart": {
+        "Companion Heal": { "frame_width": 23, "frame_height": 20 },
+        "Enemy Hurt": { "frame_width": 23, "frame_height": 20 },
+        "Player Heal": { "frame_width": 23, "frame_height": 20 },
+        "Player Hurt": { "frame_width": 23, "frame_height": 20 }
+    },
+    "Player": { "frame_width": 64, "frame_height": 64 },
+    "Word Panel": { "frame_width": 34, "frame_height": 18 }
+}

@@ -48,7 +48,7 @@ export class Preloader extends Scene {
         }
 
         //heart
-        const heartInfo = imageInfo.enemy;
+        const heartInfo = imageInfo.heart;
         for (let name in heartInfo) {
             this.load.spritesheet(
                 name.toLowerCase(),

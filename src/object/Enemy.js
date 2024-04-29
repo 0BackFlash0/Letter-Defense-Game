@@ -18,7 +18,7 @@ class Enemy {
 
         this.enemy = this.scene.physics.add
             .sprite(0, 0, name)
-            .setScale(4)
+            .setScale(5)
             .setOrigin(0.5, 0)
             .setFlipX(true);
 
@@ -48,7 +48,12 @@ class Enemy {
 
     checkText(text) {
         if (this.targetText === text) {
-            this.disappear();
+            this.scene.time.addEvent({
+                delay: 1000,
+                callback: this.disappear,
+                callbackScope: this,
+                loop: false,
+            });
             return true;
         } else {
             return false;

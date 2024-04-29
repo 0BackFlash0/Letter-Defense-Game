@@ -1,6 +1,7 @@
 import { Scene } from "phaser";
 import EnemyManager from "../object/EnemyManager.js";
 import WordManager from "../object/WordManager.js";
+import PlayerManager from "../object/PlayerManager.js";
 
 export class Game extends Scene {
     constructor() {
@@ -16,6 +17,7 @@ export class Game extends Scene {
 
         this.enemyManager = null;
         this.wordManager = null;
+        this.playerManager = null;
     }
 
     preload() {}
@@ -28,6 +30,9 @@ export class Game extends Scene {
 
         this.enemyManager = new EnemyManager(this, this.wordManager);
         this.enemyManager.initializeEnemy();
+
+        this.playerManager = new PlayerManager(this);
+        this.playerManager.initializePlayer();
 
         console.log(this);
     }
@@ -90,6 +95,7 @@ export class Game extends Scene {
                 console.log(isCorrect);
 
                 if (isCorrect) {
+                    this.playerManager.attack();
                     this.wordManager.storeWord(inputWord);
                     this.descriptionTitle.setText(inputWord);
                     this.descriptionText.setText(
