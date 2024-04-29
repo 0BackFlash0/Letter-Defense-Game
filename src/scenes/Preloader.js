@@ -17,25 +17,45 @@ export class Preloader extends Scene {
 
     preload() {
         //  Load the assets for the game - Replace with your own assets
+        this.load.json("words", "./words.json");
+
         this.load.setPath("assets");
 
         this.load.image("background", "Background.png");
         this.load.image("text input", "Text Input.png");
         this.load.image("enemy bar", "Enemy Bar.png");
+        this.load.image("description board", "Description Board.png");
 
-        this.image_info = this.cache.json.get("image info");
+        const imageInfo = this.cache.json.get("image info");
+
+        //player
+        this.load.spritesheet("player", `Sprites/Player.png`, {
+            frameWidth: imageInfo["Player"].frame_width,
+            frameHeight: imageInfo["Player"].frame_height,
+        });
 
         //enemy
-        console.log(this.image_info["enemy"]);
-
-        let enemy_info = this.image_info.enemy;
-        for (let name in enemy_info) {
+        const enemyInfo = imageInfo.enemy;
+        for (let name in enemyInfo) {
             this.load.spritesheet(
                 name.toLowerCase(),
                 `Sprites/enemy/${name}.png`,
                 {
-                    frameWidth: enemy_info[name].frame_width,
-                    frameHeight: enemy_info[name].frame_height,
+                    frameWidth: enemyInfo[name].frame_width,
+                    frameHeight: enemyInfo[name].frame_height,
+                }
+            );
+        }
+
+        //heart
+        const heartInfo = imageInfo.enemy;
+        for (let name in heartInfo) {
+            this.load.spritesheet(
+                name.toLowerCase(),
+                `Sprites/heart/${name}.png`,
+                {
+                    frameWidth: heartInfo[name].frame_width,
+                    frameHeight: heartInfo[name].frame_height,
                 }
             );
         }

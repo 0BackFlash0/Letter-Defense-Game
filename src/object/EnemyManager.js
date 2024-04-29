@@ -6,16 +6,28 @@ const ENEMYXPOS = 1800;
 const ENEMYYPOSRANGE = [100, 980];
 
 class EnemyManager {
-    constructor(scene) {
+    constructor(scene, wordManager) {
         this.scene = scene;
+        this.wordManager = wordManager;
 
         // debugger;
 
         this.image_info = this.scene.cache.json.get("image info");
 
+        this.Timer = 5;
+        this.enemyInterval = 5;
+        this.bossPossibility = 0.1;
+
         this.activedEnemy = new Array();
         this.bossEnemy = new Array();
         this.normalEnemy = new Array();
+    }
+
+    update(time, deltaTime) {
+        this.enemyGenerator(deltaTime);
+        this.activedEnemy.forEach((enemy) => {
+            enemy.update();
+        });
     }
 
     initializeEnemy() {
@@ -82,21 +94,28 @@ class EnemyManager {
 
     checkInput(text) {
         let idx = 0;
+        let isChecked = false;
         this.activedEnemy.forEach((enemy) => {
             if (enemy.checkText(text)) {
                 this.activedEnemy.splice(idx, 1);
-                return true;
+                isChecked = true;
             }
             idx++;
         });
 
-        return false;
+        return isChecked;
     }
 
-    update() {
-        this.activedEnemy.forEach((enemy) => {
-            enemy.update();
-        });
+    enemyGenerator(deltaTime) {
+        this.Timer += deltaTime / 1000;
+
+        if (this.Timer > this.enemyInterval) {
+            const word = this.wordManager.getRandomWord();
+            const isBoss = Math.random() < this.bossPossibility;
+
+            this.generateEnemy(word, isBoss);
+            this.Timer -= this.enemyInterval;
+        }
     }
 }
 

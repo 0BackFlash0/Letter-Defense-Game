@@ -1,16 +1,21 @@
 import { Scene } from "phaser";
 import EnemyManager from "../object/EnemyManager.js";
+import WordManager from "../object/WordManager.js";
 
 export class Game extends Scene {
     constructor() {
         super("Game");
 
-        this.input_box = null;
-        this.input_Element = null;
+        this.inputBox = null;
+        this.inputText = null;
+        this.descriptionBoard = null;
+        this.descriptionTitle = null;
+        this.descriptionText = null;
 
-        this.image_info = null;
+        this.imageInfo = null;
 
         this.enemyManager = null;
+        this.wordManager = null;
     }
 
     preload() {}
@@ -19,21 +24,49 @@ export class Game extends Scene {
         this.add.image(0, 0, "background").setOrigin(0);
         this.createUI();
 
-        this.enemyManager = new EnemyManager(this);
-        this.enemyManager.initializeEnemy();
+        this.wordManager = new WordManager(this);
 
-        this.enemyManager.generateEnemy("안녕하세요");
+        this.enemyManager = new EnemyManager(this, this.wordManager);
+        this.enemyManager.initializeEnemy();
 
         console.log(this);
     }
 
-    update() {
-        if (this.enemyManager) this.enemyManager.update();
+    update(time, deltaTime) {
+        if (this.enemyManager) this.enemyManager.update(time, deltaTime);
         // console.log(this.inputElement.node.value);
     }
 
     createUI() {
-        this.input_box = this.add.image(800, 960, "text input").setOrigin(0);
+        this.descriptionBoard = this.add
+            .image(430, 850, "description board")
+            .setOrigin(0);
+
+        this.descriptionTitle = this.add
+            .text(430, 860, "", {
+                fontSize: "40px",
+                fill: "#000",
+                fontFamily: "Jua",
+                fixedWidth: 330,
+                fixedHeight: 40,
+                align: "center",
+            })
+            .setOrigin(0);
+
+        this.descriptionText = this.add
+            .text(440, 900, "", {
+                fontSize: "26px",
+                fill: "#000",
+                fontFamily: "Jua",
+                fixedWidth: 310,
+                fixedHeight: 150,
+                lineSpacing: 1,
+                align: "left",
+                wordWrap: { width: 310, useAdvancedWrap: true },
+            })
+            .setOrigin(0);
+
+        this.inputBox = this.add.image(800, 960, "text input").setOrigin(0);
         this.inputElement = this.add
             .dom(
                 800,
@@ -49,8 +82,20 @@ export class Game extends Scene {
 
         this.inputElement.node.addEventListener("keypress", (e) => {
             if (e.key === "Enter") {
-                this.enemyManager.checkInput(this.inputElement.node.value);
+                const inputWord = this.inputElement.node.value;
+                const isCorrect = this.enemyManager.checkInput(inputWord);
+
                 this.inputElement.node.value = "";
+
+                console.log(isCorrect);
+
+                if (isCorrect) {
+                    this.wordManager.storeWord(inputWord);
+                    this.descriptionTitle.setText(inputWord);
+                    this.descriptionText.setText(
+                        this.wordManager.getDescription(inputWord)
+                    );
+                }
             }
         });
     }

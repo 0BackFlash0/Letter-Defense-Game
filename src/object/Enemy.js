@@ -10,7 +10,7 @@ class Enemy {
         this.bar = this.scene.add.image(0, 0, "enemy bar").setOrigin(0.5, 1);
         this.text = this.scene.add
             .text(0, 0, "", {
-                fontSize: "28px",
+                fontSize: "36px",
                 fill: "#FFFFFF",
                 fontFamily: "Jua",
             })
@@ -27,6 +27,10 @@ class Enemy {
         this.enemy.visible = false;
         this.bar.visible = false;
         this.text.visible = false;
+
+        this.collision = this.scene.add
+            .rectangle(0, 0, 2, 2, "#000")
+            .setOrigin(0);
     }
 
     update() {
@@ -36,6 +40,9 @@ class Enemy {
 
             this.text.x = this.enemy.x;
             this.text.y = this.bar.y - this.bar.height / 2;
+
+            this.collision.x = this.enemy.x - this.enemy.width * 2;
+            this.collision.y = this.bar.y;
         }
     }
 
