@@ -1,5 +1,7 @@
 import Phaser from "phaser";
 
+const ENEMYVELOCITY = 30;
+
 class Enemy {
     constructor(scene, name, anim) {
         this.scene = scene;
@@ -7,6 +9,15 @@ class Enemy {
         this.isActived = false;
         this.targetText = "";
 
+        this.bar = null;
+        this.text = null;
+        this.enemy = null;
+
+        this.initialize(name, anim)
+
+    }
+
+    initialize(name, anim){
         this.bar = this.scene.add.image(0, 0, "enemy bar").setOrigin(0.5, 1);
         this.text = this.scene.add
             .text(0, 0, "", {
@@ -27,10 +38,6 @@ class Enemy {
         this.enemy.visible = false;
         this.bar.visible = false;
         this.text.visible = false;
-
-        this.collision = this.scene.add
-            .rectangle(0, 0, 2, 2, "#000")
-            .setOrigin(0);
     }
 
     update() {
@@ -40,10 +47,11 @@ class Enemy {
 
             this.text.x = this.enemy.x;
             this.text.y = this.bar.y - this.bar.height / 2;
-
-            this.collision.x = this.enemy.x - this.enemy.width * 2;
-            this.collision.y = this.bar.y;
         }
+    }
+
+    checkBoundary(boundary){
+        return this.enemy.x < boundary
     }
 
     checkText(text) {
@@ -84,7 +92,7 @@ class Enemy {
         this.bar.visible = true;
         this.text.visible = true;
 
-        this.enemy.body.velocity.x = -10;
+        this.enemy.body.velocity.x = -ENEMYVELOCITY;
     }
 }
 

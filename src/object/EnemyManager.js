@@ -4,11 +4,13 @@ import Enemy from "./Enemy.js";
 const BOSS = ["Big Demon", "Big Zombie", "Ogre"];
 const ENEMYXPOS = 1800;
 const ENEMYYPOSRANGE = [100, 980];
+const DAMAGEBOUNDARY = 270;
 
 class EnemyManager {
-    constructor(scene, wordManager) {
+    constructor(scene, wordManager, playerManager) {
         this.scene = scene;
         this.wordManager = wordManager;
+        this.playerManager = playerManager;
 
         // debugger;
 
@@ -21,16 +23,41 @@ class EnemyManager {
         this.activedEnemy = new Array();
         this.bossEnemy = new Array();
         this.normalEnemy = new Array();
+
+        this.initialize();
     }
 
     update(time, deltaTime) {
         this.enemyGenerator(deltaTime);
         this.activedEnemy.forEach((enemy) => {
             enemy.update();
+            if(enemy.checkBoundary(DAMAGEBOUNDARY)){
+                this.playerManager.hurt();
+            }
         });
     }
 
-    initializeEnemy() {
+    initialize() {
+        this.createAnims();
+        const enemy_info = this.image_info.enemy;
+
+        for (let name in enemy_info) {
+
+            let instance = new Enemy(
+                this.scene,
+                name,
+                `${name.toLowerCase()} walk`
+            );
+
+            if (BOSS.includes(name)) {
+                this.bossEnemy.push(instance);
+            } else {
+                this.normalEnemy.push(instance);
+            }
+        }
+    }
+
+    createAnims(){
         const enemy_info = this.image_info.enemy;
 
         for (let name in enemy_info) {
@@ -46,19 +73,18 @@ class EnemyManager {
                 frameRate: 8,
                 repeat: -1,
             });
-
-            let instance = new Enemy(
-                this.scene,
-                name,
-                `${name.toLowerCase()} walk`
-            );
-
-            if (BOSS.includes(name)) {
-                this.bossEnemy.push(instance);
-            } else {
-                this.normalEnemy.push(instance);
-            }
         }
+
+        this.scene.anims.create({
+            key: "enemy heart hurt",
+            frames: this.scene.anims.generateFrameNumbers("enemy hurt", {
+                start: 0,
+                end: 5,
+            }),
+            frameRate: 5,
+            repeat: 0,
+        })
+
     }
 
     generateEnemy(text, isBoss = false) {

@@ -28,11 +28,10 @@ export class Game extends Scene {
 
         this.wordManager = new WordManager(this);
 
-        this.enemyManager = new EnemyManager(this, this.wordManager);
-        this.enemyManager.initializeEnemy();
-
         this.playerManager = new PlayerManager(this);
-        this.playerManager.initializePlayer();
+
+        this.enemyManager = new EnemyManager(this, this.wordManager, this.playerManager);
+
 
         console.log(this);
     }
