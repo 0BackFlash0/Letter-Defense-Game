@@ -10,6 +10,7 @@ const config = {
     type: Phaser.AUTO,
     width: 1920,
     height: 1080,
+    pixelArt: true,
     parent: "game-container",
     physics: {
         debug: true,
@@ -21,9 +22,9 @@ const config = {
     scale: {
         // width: 1280,
         // height: 720,
-        zoom: 0.5,
-        // mode: Phaser.Scale.FIT,
-        // autoCenter: Phaser.Scale.CENTER_BOTH,
+        // zoom: 0.5,
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
     },
     scene: [
         Boot,

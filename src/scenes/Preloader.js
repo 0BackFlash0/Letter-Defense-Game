@@ -25,6 +25,7 @@ export class Preloader extends Scene {
         this.load.image("text input", "Text Input.png");
         this.load.image("enemy bar", "Enemy Bar.png");
         this.load.image("description board", "Description Board.png");
+        this.load.image("score board", "Score Board.png");
 
         const imageInfo = this.cache.json.get("image info");
 
@@ -43,6 +44,19 @@ export class Preloader extends Scene {
                 {
                     frameWidth: enemyInfo[name].frame_width,
                     frameHeight: enemyInfo[name].frame_height,
+                }
+            );
+        }
+
+        //companion
+        const companionInfo = imageInfo.companion;
+        for (let name in companionInfo) {
+            this.load.spritesheet(
+                name.toLowerCase(),
+                `Sprites/companion/${name}.png`,
+                {
+                    frameWidth: companionInfo[name].frame_width,
+                    frameHeight: companionInfo[name].frame_height,
                 }
             );
         }

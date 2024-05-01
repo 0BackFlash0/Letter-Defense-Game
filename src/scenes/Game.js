@@ -2,6 +2,9 @@ import { Scene } from "phaser";
 import EnemyManager from "../object/EnemyManager.js";
 import WordManager from "../object/WordManager.js";
 import PlayerManager from "../object/PlayerManager.js";
+import CompanionManager from "../object/CompanionManager.js";
+
+const WORDSCORE = 30;
 
 export class Game extends Scene {
     constructor() {
@@ -15,7 +18,9 @@ export class Game extends Scene {
 
         this.imageInfo = null;
 
+        this.eventEmitter = null;
         this.enemyManager = null;
+        this.companionManager = null;
         this.wordManager = null;
         this.playerManager = null;
     }
@@ -26,18 +31,32 @@ export class Game extends Scene {
         this.add.image(0, 0, "background").setOrigin(0);
         this.createUI();
 
+        this.eventEmitter = new Phaser.Events.EventEmitter();
+
         this.wordManager = new WordManager(this);
 
-        this.playerManager = new PlayerManager(this);
+        this.playerManager = new PlayerManager(this, this.eventEmitter);
 
-        this.enemyManager = new EnemyManager(this, this.wordManager, this.playerManager);
+        this.companionManager = new CompanionManager(
+            this,
+            this.eventEmitter,
+            this.wordManager,
+            this.playerManager
+        );
 
-
-        console.log(this);
+        this.enemyManager = new EnemyManager(
+            this,
+            this.eventEmitter,
+            this.wordManager,
+            this.companionManager,
+            this.playerManager
+        );
     }
 
     update(time, deltaTime) {
         if (this.enemyManager) this.enemyManager.update(time, deltaTime);
+        if (this.companionManager)
+            this.companionManager.update(time, deltaTime);
         // console.log(this.inputElement.node.value);
     }
 
@@ -86,22 +105,34 @@ export class Game extends Scene {
 
         this.inputElement.node.addEventListener("keypress", (e) => {
             if (e.key === "Enter") {
-                const inputWord = this.inputElement.node.value;
-                const isCorrect = this.enemyManager.checkInput(inputWord);
-
-                this.inputElement.node.value = "";
-
-                console.log(isCorrect);
-
-                if (isCorrect) {
-                    this.playerManager.attack();
-                    this.wordManager.storeWord(inputWord);
-                    this.descriptionTitle.setText(inputWord);
-                    this.descriptionText.setText(
-                        this.wordManager.getDescription(inputWord)
-                    );
-                }
+                this.inputCheck();
             }
         });
+    }
+
+    inputCheck() {
+        const inputWord = this.inputElement.node.value;
+        if (inputWord !== "") {
+            const isCorrect =
+                this.enemyManager.checkInput(inputWord) ||
+                this.companionManager.checkInput(inputWord);
+
+            this.inputElement.node.value = "";
+
+            console.log(isCorrect);
+
+            if (isCorrect) {
+                this.playerManager.gainScore(WORDSCORE);
+                this.playerManager.gainCombo(1);
+                this.playerManager.attack();
+                this.wordManager.storeWord(inputWord);
+                this.descriptionTitle.setText(inputWord);
+                this.descriptionText.setText(
+                    this.wordManager.getDescription(inputWord)
+                );
+            } else {
+                this.playerManager.resetCombo();
+            }
+        }
     }
 }

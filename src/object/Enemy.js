@@ -1,23 +1,27 @@
 import Phaser from "phaser";
 
-const ENEMYVELOCITY = 30;
+const LIFE = { small: 1, normal: 2, big: 3 };
+const VELOCITY = { small: 60, normal: 40, big: 30 };
+const HEARTDISTANCE = 50;
 
 class Enemy {
-    constructor(scene, name, anim) {
+    constructor(scene, name, anim, size) {
         this.scene = scene;
+        this.size = size;
 
         this.isActived = false;
-        this.targetText = "";
+        this.targetTexts = [];
+        this.life = 0;
 
         this.bar = null;
         this.text = null;
         this.enemy = null;
+        this.hearts = new Array();
 
-        this.initialize(name, anim)
-
+        this.initialize(name, anim);
     }
 
-    initialize(name, anim){
+    initialize(name, anim) {
         this.bar = this.scene.add.image(0, 0, "enemy bar").setOrigin(0.5, 1);
         this.text = this.scene.add
             .text(0, 0, "", {
@@ -35,6 +39,14 @@ class Enemy {
 
         this.enemy.play(anim);
 
+        for (let i = 0; i < LIFE[this.size]; i++) {
+            const heart = this.scene.add
+                .sprite(0, 0, "enemy hurt")
+                .setOrigin(0.5, 1);
+            this.hearts.push(heart);
+            this.hearts[i].visible = false;
+        }
+
         this.enemy.visible = false;
         this.bar.visible = false;
         this.text.visible = false;
@@ -47,52 +59,78 @@ class Enemy {
 
             this.text.x = this.enemy.x;
             this.text.y = this.bar.y - this.bar.height / 2;
+
+            for (let i = 0; i < LIFE[this.size]; i++) {
+                this.hearts[i].x =
+                    this.enemy.x -
+                    0.5 * HEARTDISTANCE * (LIFE[this.size] - 1) +
+                    HEARTDISTANCE * i;
+                this.hearts[i].y = this.bar.y - this.bar.height;
+            }
         }
     }
 
-    checkBoundary(boundary){
-        return this.enemy.x < boundary
+    checkBoundary(boundary) {
+        return this.life > 0 && this.enemy.x < boundary;
     }
 
     checkText(text) {
-        if (this.targetText === text) {
-            this.scene.time.addEvent({
-                delay: 1000,
-                callback: this.disappear,
-                callbackScope: this,
-                loop: false,
-            });
+        if (this.targetTexts[this.life - 1] === text) {
             return true;
         } else {
             return false;
         }
     }
 
-    disappear() {
+    damaged(damage) {
+        for (let i = 0; i < damage && this.life > 0; i++) {
+            this.life -= 1;
+
+            this.hearts[this.life].play("enemy heart hurt");
+            if (this.life >= 1) {
+                this.text.setText(this.targetTexts[this.life - 1]);
+            } else {
+                this.text.setText("");
+            }
+        }
+    }
+
+    remove() {
         this.isActived = false;
 
-        this.targetText = "";
+        this.targetTexts = [];
         this.text.setText("");
-        this.enemy.visible = false;
         this.bar.visible = false;
         this.text.visible = false;
+        this.enemy.visible = false;
+
+        for (let i = 0; i < LIFE[this.size]; i++) {
+            this.hearts[i].visible = false;
+            this.hearts[i].setFrame(0);
+        }
 
         this.enemy.body.velocity.x = 0;
     }
 
-    generate(x, y, text) {
+    generate(x, y, texts, velocity_ratio) {
         this.isActived = true;
+
+        this.life = LIFE[this.size];
+        this.enemy.body.velocity.x = -VELOCITY[this.size] * velocity_ratio;
 
         this.enemy.x = x;
         this.enemy.y = y;
 
-        this.targetText = text;
-        this.text.setText(text);
+        this.targetTexts = texts.slice();
+        this.text.setText(texts[this.life - 1]);
+
         this.enemy.visible = true;
         this.bar.visible = true;
         this.text.visible = true;
 
-        this.enemy.body.velocity.x = -ENEMYVELOCITY;
+        for (let i = 0; i < LIFE[this.size]; i++) {
+            this.hearts[i].visible = true;
+        }
     }
 }
 
