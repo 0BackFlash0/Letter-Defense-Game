@@ -11,7 +11,7 @@ module.exports = {
         path: path.resolve(process.cwd(), "dist"),
         filename: "bundle.min.js",
         clean: {
-            keep: /\.git$/,
+            keep: /\.git/,
         },
     },
     module: {
@@ -34,9 +34,9 @@ module.exports = {
         ],
     },
     plugins: [
-        new CleanWebpackPlugin({
-            cleanOnceBeforeBuildPatterns: [path.join(__dirname, "dist/**/*")],
-        }),
+        // new CleanWebpackPlugin({
+        //     cleanOnceBeforeBuildPatterns: [path.join(__dirname, "dist/**/*")],
+        // }),
         new webpack.DefinePlugin({
             "typeof CANVAS_RENDERER": JSON.stringify(true),
             "typeof WEBGL_RENDERER": JSON.stringify(true),

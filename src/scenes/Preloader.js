@@ -18,30 +18,10 @@ export class Preloader extends Scene {
 
     preload() {
         //  Load the assets for the game - Replace with your own assets
-        this.load.json("words", "./words.json");
-
-        this.load.setPath("sounds");
-        this.load.audio(
-            "bgm",
-            "open-fields-aaron-paul-low-main-version-25198-02-16.mp3"
-        );
-        this.load.audio("player hit", "8-bit-game-5-188107.mp3");
-        this.load.audio(
-            "player heal",
-            "sound-effect-twinklesparkle-115095.mp3"
-        );
-        this.load.audio("player die", "8-bit-game-6-188105.mp3");
-        this.load.audio(
-            "player shoot",
-            "bow-release-bow-and-arrow-4-101936.mp3"
-        );
-        this.load.audio("target hit", "8-bit-game-7-188104.mp3");
-        this.load.audio("enemy die", "8-bit-game-4-188106.mp3");
-        this.load.audio("companion help", "8-bit-game-2-186976.mp3");
-        this.load.audio("companion leave", "8-bit-game-1-186975.mp3");
-        this.load.audio("elf skill", "8-bit-game-3-186977.mp3");
 
         this.load.setPath("assets");
+
+        this.load.json("words", "./words.json");
 
         this.load.image("text input", "Text Input.png");
         this.load.image("enemy bar", "Enemy Bar.png");
@@ -120,6 +100,28 @@ export class Preloader extends Scene {
             frameWidth: imageInfo["Word Panel"].frame_width,
             frameHeight: imageInfo["Word Panel"].frame_height,
         });
+
+        this.load.setPath("assets/sounds");
+
+        this.load.audio(
+            "bgm",
+            "open-fields-aaron-paul-low-main-version-25198-02-16.mp3"
+        );
+        this.load.audio("player hit", "8-bit-game-5-188107.mp3");
+        this.load.audio(
+            "player heal",
+            "sound-effect-twinklesparkle-115095.mp3"
+        );
+        this.load.audio("player die", "8-bit-game-6-188105.mp3");
+        this.load.audio(
+            "player shoot",
+            "bow-release-bow-and-arrow-4-101936.mp3"
+        );
+        this.load.audio("target hit", "8-bit-game-7-188104.mp3");
+        this.load.audio("enemy die", "8-bit-game-4-188106.mp3");
+        this.load.audio("companion help", "8-bit-game-2-186976.mp3");
+        this.load.audio("companion leave", "8-bit-game-1-186975.mp3");
+        this.load.audio("elf skill", "8-bit-game-3-186977.mp3");
     }
 
     create() {

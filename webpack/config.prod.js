@@ -16,7 +16,7 @@ module.exports = {
         path: path.resolve(process.cwd(), "dist"),
         filename: "./bundle.min.js",
         clean: {
-            keep: /\.git$/,
+            keep: /\.git/,
         },
     },
     devtool: false,
@@ -55,7 +55,7 @@ module.exports = {
         ],
     },
     plugins: [
-        new CleanWebpackPlugin(),
+        // new CleanWebpackPlugin(),
         new webpack.DefinePlugin({
             "typeof CANVAS_RENDERER": JSON.stringify(true),
             "typeof WEBGL_RENDERER": JSON.stringify(true),
