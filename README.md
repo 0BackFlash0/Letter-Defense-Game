@@ -29,7 +29,7 @@
 
 ## 게임 흐름도
 
-![flow_chart](./Flow Chart.png)
+![game_flow_chart](<./Flow Chart.png>)
 
 ## Reference
 
