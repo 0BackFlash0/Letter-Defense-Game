@@ -37,7 +37,7 @@
 
 ### 기술
 
--   Phaser
+-   Phaser 3
 
 ### Template
 
