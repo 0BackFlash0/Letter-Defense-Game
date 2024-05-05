@@ -8,8 +8,11 @@ module.exports = {
     devtool: "eval-source-map",
     entry: "./src/main.js",
     output: {
-        path: path.resolve(process.cwd(), 'dist'),
-        filename: "bundle.min.js"
+        path: path.resolve(process.cwd(), "dist"),
+        filename: "bundle.min.js",
+        clean: {
+            keep: ".git",
+        },
     },
     module: {
         rules: [
@@ -17,22 +20,22 @@ module.exports = {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: "babel-loader"
-                }
+                    loader: "babel-loader",
+                },
             },
             {
                 test: [/\.vert$/, /\.frag$/],
-                use: "raw-loader"
+                use: "raw-loader",
             },
             {
                 test: /\.(gif|png|jpe?g|svg|xml|glsl)$/i,
-                use: "file-loader"
-            }
-        ]
+                use: "file-loader",
+            },
+        ],
     },
     plugins: [
         new CleanWebpackPlugin({
-            cleanOnceBeforeBuildPatterns: [path.join(__dirname, "dist/**/*")]
+            cleanOnceBeforeBuildPatterns: [path.join(__dirname, "dist/**/*")],
         }),
         new webpack.DefinePlugin({
             "typeof CANVAS_RENDERER": JSON.stringify(true),
@@ -42,10 +45,10 @@ module.exports = {
             "typeof PLUGIN_3D": JSON.stringify(false),
             "typeof PLUGIN_CAMERA3D": JSON.stringify(false),
             "typeof PLUGIN_FBINSTANT": JSON.stringify(false),
-            "typeof FEATURE_SOUND": JSON.stringify(true)
+            "typeof FEATURE_SOUND": JSON.stringify(true),
         }),
         new HtmlWebpackPlugin({
-            template: "./index.html"
-        })
-    ]
+            template: "./index.html",
+        }),
+    ],
 };
