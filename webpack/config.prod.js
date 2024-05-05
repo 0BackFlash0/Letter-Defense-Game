@@ -1,5 +1,5 @@
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const CopyPlugin = require('copy-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const TerserPlugin = require("terser-webpack-plugin");
@@ -13,13 +13,16 @@ module.exports = {
     mode: "production",
     entry: "./src/main.js",
     output: {
-        path: path.resolve(process.cwd(), 'dist'),
-        filename: "./bundle.min.js"
+        path: path.resolve(process.cwd(), "dist"),
+        filename: "./bundle.min.js",
+    },
+    clean: {
+        keep: /\.git/,
     },
     devtool: false,
     performance: {
         maxEntrypointSize: 2500000,
-        maxAssetSize: 1200000
+        maxAssetSize: 1200000,
     },
     module: {
         rules: [
@@ -27,29 +30,29 @@ module.exports = {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
-                    loader: "babel-loader"
-                }
+                    loader: "babel-loader",
+                },
             },
             {
                 test: [/\.vert$/, /\.frag$/],
-                use: "raw-loader"
+                use: "raw-loader",
             },
             {
                 test: /\.(gif|png|jpe?g|svg|xml|glsl)$/i,
-                use: "file-loader"
-            }
-        ]
+                use: "file-loader",
+            },
+        ],
     },
     optimization: {
         minimizer: [
             new TerserPlugin({
                 terserOptions: {
                     output: {
-                        comments: false
-                    }
-                }
-            })
-        ]
+                        comments: false,
+                    },
+                },
+            }),
+        ],
     },
     plugins: [
         new CleanWebpackPlugin(),
@@ -61,17 +64,17 @@ module.exports = {
             "typeof PLUGIN_3D": JSON.stringify(false),
             "typeof PLUGIN_CAMERA3D": JSON.stringify(false),
             "typeof PLUGIN_FBINSTANT": JSON.stringify(false),
-            "typeof FEATURE_SOUND": JSON.stringify(true)
+            "typeof FEATURE_SOUND": JSON.stringify(true),
         }),
         new HtmlWebpackPlugin({
-            template: "./index.html"
+            template: "./index.html",
         }),
         new CopyPlugin({
             patterns: [
-                { from: 'public/assets', to: 'assets' },
-                { from: 'public/favicon.png', to: 'favicon.png' },
-                { from: 'public/style.css', to: 'style.css' }
+                { from: "public/assets", to: "assets" },
+                { from: "public/favicon.png", to: "favicon.png" },
+                { from: "public/style.css", to: "style.css" },
             ],
         }),
-    ]
+    ],
 };
