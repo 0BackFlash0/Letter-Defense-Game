@@ -33,7 +33,7 @@
 
 ## Reference
 
-### 기술 스택
+### 기술
 
 -   Phaser
 
