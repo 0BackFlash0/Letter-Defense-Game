@@ -15,9 +15,9 @@ module.exports = {
     output: {
         path: path.resolve(process.cwd(), "dist"),
         filename: "./bundle.min.js",
-    },
-    clean: {
-        keep: /\.git/,
+        clean: {
+            keep: /\.git/,
+        },
     },
     devtool: false,
     performance: {
