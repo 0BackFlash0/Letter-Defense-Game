@@ -5,6 +5,8 @@ const VELOCITY = 25;
 const HEARTDISTANCE = 50;
 const TIME = 30;
 const BARWIDTH = 80;
+const COMPANIONDEPTH = 2;
+const COMPANIONUIDEPTH = 4;
 
 class Companion {
     constructor(scene, name, anim, eventEmitter) {
@@ -28,14 +30,18 @@ class Companion {
     }
 
     initialize(name, anim) {
-        this.bar = this.scene.add.image(0, 0, "enemy bar").setOrigin(0.5, 1);
+        this.bar = this.scene.add
+            .image(0, 0, "enemy bar")
+            .setOrigin(0.5, 1)
+            .setDepth(COMPANIONUIDEPTH);
         this.text = this.scene.add
             .text(0, 0, "", {
+                fontFamily: "Jua",
                 fontSize: "36px",
                 fill: "#FFFFFF",
-                fontFamily: "Jua",
             })
-            .setOrigin(0.5, 0.45);
+            .setOrigin(0.5, 0.45)
+            .setDepth(COMPANIONUIDEPTH);
 
         this.companion = this.scene.physics.add
             .sprite(0, 0, name)
@@ -43,19 +49,21 @@ class Companion {
             .setOrigin(0.5, 0)
             .setFlipX(true);
 
-        this.companion.play(anim);
+        this.companion.play(anim).setDepth(COMPANIONDEPTH);
 
         for (let i = 0; i < LIFE; i++) {
             const heart = this.scene.add
                 .sprite(0, 0, "companion heal")
-                .setOrigin(0.5, 1);
+                .setOrigin(0.5, 1)
+                .setDepth(COMPANIONUIDEPTH);
             this.hearts.push(heart);
             this.hearts[i].visible = false;
         }
 
         this.helpRemain = this.scene.add
-            .rectangle(0, 0, BARWIDTH, 10, 0xffffff)
-            .setOrigin(0.5, 1);
+            .rectangle(0, 0, BARWIDTH, 10, 0xfff70d)
+            .setOrigin(0.5, 1)
+            .setDepth(COMPANIONUIDEPTH);
 
         this.companion.visible = false;
         this.bar.visible = false;
@@ -73,7 +81,6 @@ class Companion {
                 this.helpRemain.width = BARWIDTH * (this.time / TIME / 1000);
 
                 if (this.time <= 0) {
-                    debugger;
                     this.isHelping = false;
                     this.time = 0;
                     this.timeout();
@@ -127,7 +134,6 @@ class Companion {
     }
 
     remove() {
-        debugger;
         this.isActived = false;
 
         this.targetTexts = [];

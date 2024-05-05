@@ -4,19 +4,21 @@ const HEARTINTERVAL = 100;
 const HEARTPOSITION = [854, 870];
 const PLAYERPOSITION = [50, 200];
 const SCOREBOARDPOSITION = [170, 30];
-const COMBOPOSITION = [170, 30];
 const OVERHEALSCORE = 500;
+const PLAYERDEPTH = 5;
+const UIDEPTH = 6;
 
 class PlayerManager {
-    constructor(scene, eventEmitter) {
+    constructor(scene, eventEmitter, soundManager) {
         this.scene = scene;
         this.eventEmitter = eventEmitter;
+        this.soundManager = soundManager;
 
         this.player = null;
-
         this.life = 3;
         this.score = 0;
         this.combo = 0;
+        this.maxCombo = 0;
 
         this.scoreBoard = null;
         this.scoreText = null;
@@ -33,7 +35,8 @@ class PlayerManager {
         this.player = this.scene.add
             .sprite(...PLAYERPOSITION, "player")
             .setScale(5)
-            .setOrigin(0);
+            .setOrigin(0)
+            .setDepth(PLAYERDEPTH);
 
         this.player.play("player idle");
 
@@ -45,13 +48,15 @@ class PlayerManager {
                     "player hurt"
                 )
                 .setScale(4)
-                .setOrigin(0);
+                .setOrigin(0)
+                .setDepth(UIDEPTH);
             this.heart.push(heart);
         }
 
         this.scoreBoard = this.scene.add
             .image(...SCOREBOARDPOSITION, "score board")
-            .setOrigin(0);
+            .setOrigin(0)
+            .setDepth(UIDEPTH);
 
         this.scoreText = this.scene.add
             .text(
@@ -64,7 +69,8 @@ class PlayerManager {
                     fontFamily: "Jua",
                 }
             )
-            .setOrigin(0, 0.5);
+            .setOrigin(0, 0.5)
+            .setDepth(UIDEPTH);
 
         const jumText = this.scene.add
             .text(
@@ -77,7 +83,8 @@ class PlayerManager {
                     fontFamily: "Jua",
                 }
             )
-            .setOrigin(1, 0.5);
+            .setOrigin(1, 0.5)
+            .setDepth(UIDEPTH);
 
         this.comboText = this.scene.add
             .text(
@@ -90,7 +97,8 @@ class PlayerManager {
                     fontFamily: "Jua",
                 }
             )
-            .setOrigin(1, 0.5);
+            .setOrigin(1, 0.5)
+            .setDepth(UIDEPTH);
     }
 
     createAnims() {
@@ -137,6 +145,7 @@ class PlayerManager {
 
     attack() {
         this.player.play("player attack");
+        this.soundManager.playEffect("player shoot");
         this.player.once("animationcomplete", () => {
             this.player.play("player idle");
         });
@@ -148,6 +157,7 @@ class PlayerManager {
 
         console.log(this.heart[this.life]);
         this.heart[this.life].play("player heart hurt");
+        this.soundManager.playEffect("player hit");
         this.heart[this.life].once("animationcomplete", () => {
             if (this.life <= 0) {
                 this.die();
@@ -159,12 +169,16 @@ class PlayerManager {
         if (this.life < 3) {
             this.life += 1;
             this.heart[this.life - 1].play("player heart heal");
+            this.soundManager.playEffect("player heal");
         } else {
             this.gainScore(OVERHEALSCORE);
         }
     }
 
-    die() {}
+    die() {
+        this.soundManager.playEffect("player die");
+        this.eventEmitter.emit("player die");
+    }
 
     gainScore(gain) {
         this.score += Math.floor(gain * (1 + this.combo / 20));
@@ -173,6 +187,9 @@ class PlayerManager {
 
     gainCombo(gain) {
         this.combo += gain;
+        if (this.combo > this.maxCombo) {
+            this.maxCombo = this.combo;
+        }
         this.comboText.setText(`${this.combo} Combo`);
     }
 

@@ -26,6 +26,7 @@
     },
     "button": {
         "Book Button": { "frame_width": 18, "frame_height": 18 },
+        "Book Button_": { "frame_width": 18, "frame_height": 18 },
         "Continue Button": { "frame_width": 22, "frame_height": 22 },
         "Pause Button": { "frame_width": 22, "frame_height": 22 },
         "Quit Button": { "frame_width": 22, "frame_height": 22 },
@@ -38,5 +39,6 @@
         "Player Hurt": { "frame_width": 23, "frame_height": 20 }
     },
     "Player": { "frame_width": 64, "frame_height": 64 },
-    "Word Panel": { "frame_width": 34, "frame_height": 18 }
+    "Word Panel": { "frame_width": 34, "frame_height": 18 },
+    "Long Button": { "frame_width": 242, "frame_height": 82 }
 }

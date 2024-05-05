@@ -14,18 +14,22 @@ const COMPANIONHELPTIME = 30;
 const WIZARDSLOW = 0.5;
 const KNIGHTDAMAGE = 2;
 const COMPANIONSCORE = 150;
+const DEFAULTINTERVAL = 40;
+const MININTERVAL = 25;
+const INTERVALREDUCERATIO = 0.92;
 
 class CompanionManager {
-    constructor(scene, eventEmitter, wordManager, playerManager) {
+    constructor(scene, eventEmitter, soundManager, wordManager, playerManager) {
         this.scene = scene;
         this.eventEmitter = eventEmitter;
+        this.soundManager = soundManager;
         this.wordManager = wordManager;
         this.playerManager = playerManager;
 
         this.image_info = this.scene.cache.json.get("image info");
 
-        this.Timer = 30;
-        this.companionInterval = 30;
+        this.Timer = MININTERVAL;
+        this.companionInterval = DEFAULTINTERVAL;
 
         this.companionVelocityRatio = 1;
         this.damage = 1;
@@ -168,12 +172,19 @@ class CompanionManager {
     }
 
     helpCompanion(companion_name) {
+        this.soundManager.playEffect("companion help");
         this.isHelping[companion_name] = true;
         this.companionList[companion_name].help(
             COMPANIONHELPXPOS,
             COMPANIONHELPYPOSLIST[companion_name],
             COMPANIONHELPTIME
         );
+
+        this.companionInterval =
+            this.companionInterval <= MININTERVAL
+                ? MININTERVAL
+                : (this.companionInterval * INTERVALREDUCERATIO).toFixed(4);
+        console.log("comp" + this.companionInterval);
         this.playerManager.gainScore(COMPANIONSCORE);
     }
 
@@ -247,14 +258,21 @@ class CompanionManager {
             this.playerManager.heal();
         });
         this.eventEmitter.on("companion timeout", (companion_name) => {
+            this.soundManager.playEffect("companion leave");
             this.isHelping[companion_name] = false;
             this.killCompanion(companion_name);
+        });
+
+        this.eventEmitter.on("set font", (font) => {
+            for (let companion_name in this.companionList) {
+                this.companionList[companion_name].text.setFontFamily(font);
+            }
         });
     }
 
     setCompanionVelocity(velocity_ratio) {
         this.activedCompanion.forEach((companion_name) => {
-            this.companionList[companion_name].companion.body.velocity.x *=
+            this.companionList[companion_name].companion.body.velocity.y *=
                 velocity_ratio;
         });
     }

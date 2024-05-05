@@ -3,6 +3,8 @@ import Phaser from "phaser";
 const LIFE = { small: 1, normal: 2, big: 3 };
 const VELOCITY = { small: 60, normal: 40, big: 30 };
 const HEARTDISTANCE = 50;
+const ENEMYDEPTH = 1;
+const ENEMYUIDEPTH = 3;
 
 class Enemy {
     constructor(scene, name, anim, size) {
@@ -22,27 +24,34 @@ class Enemy {
     }
 
     initialize(name, anim) {
-        this.bar = this.scene.add.image(0, 0, "enemy bar").setOrigin(0.5, 1);
+        this.bar = this.scene.add
+            .image(0, 0, "enemy bar")
+            .setOrigin(0.5, 1)
+            .setDepth(ENEMYUIDEPTH);
+
         this.text = this.scene.add
             .text(0, 0, "", {
+                fontFamily: "Jua",
                 fontSize: "36px",
                 fill: "#FFFFFF",
-                fontFamily: "Jua",
             })
-            .setOrigin(0.5, 0.45);
+            .setOrigin(0.5, 0.45)
+            .setDepth(ENEMYUIDEPTH);
 
         this.enemy = this.scene.physics.add
             .sprite(0, 0, name)
             .setScale(5)
             .setOrigin(0.5, 0)
-            .setFlipX(true);
+            .setFlipX(true)
+            .setDepth(ENEMYDEPTH);
 
         this.enemy.play(anim);
 
         for (let i = 0; i < LIFE[this.size]; i++) {
             const heart = this.scene.add
                 .sprite(0, 0, "enemy hurt")
-                .setOrigin(0.5, 1);
+                .setOrigin(0.5, 1)
+                .setDepth(ENEMYUIDEPTH);
             this.hearts.push(heart);
             this.hearts[i].visible = false;
         }

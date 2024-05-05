@@ -18,7 +18,6 @@ class Knight extends Companion {
     }
 
     timeout() {
-        debugger;
         this.eventEmitter.emit("companion timeout", this.name);
         this.eventEmitter.emit("knight off");
     }

@@ -9,25 +9,31 @@ const REMOVEBOUNDARY = 310;
 const WIZARDSLOW = 0.5;
 const KNIGHTDAMAGE = 2;
 const ENEMYSCORELIST = { small: 60, normal: 90, big: 120 };
+const DEFAULTINTERVAL = 8;
+const MININTERVAL = 2.5;
+const INTERVALREDUCERATIO = 0.97;
+const PENALTYINTERVAL = 3;
 
 class EnemyManager {
     constructor(
         scene,
         eventEmitter,
+        soundManager,
         wordManager,
         companionManager,
         playerManager
     ) {
         this.scene = scene;
         this.eventEmitter = eventEmitter;
+        this.soundManager = soundManager;
         this.wordManager = wordManager;
         this.companionManager = companionManager;
         this.playerManager = playerManager;
 
         this.image_info = this.scene.cache.json.get("image info");
 
-        this.Timer = 5;
-        this.enemyInterval = 5;
+        this.Timer = DEFAULTINTERVAL;
+        this.enemyInterval = DEFAULTINTERVAL;
 
         this.enemyVelocityRatio = 1;
         this.damage = 1;
@@ -107,6 +113,8 @@ class EnemyManager {
             if (!this.activedEnemy.includes(name)) available_list.push(name);
         }
 
+        if (available_list.length == 0) return;
+
         const enemy_name =
             available_list[Math.floor(Math.random() * available_list.length)];
 
@@ -137,17 +145,26 @@ class EnemyManager {
     killEnemy(enemy_name, isDamage = false) {
         this.activedEnemy.splice(this.activedEnemy.indexOf(enemy_name), 1);
         this.enemyList[enemy_name].remove();
-        if (!isDamage)
+        if (!isDamage) {
+            this.enemyInterval =
+                this.enemyInterval <= MININTERVAL
+                    ? MININTERVAL
+                    : (this.enemyInterval * INTERVALREDUCERATIO).toFixed(4);
+            this.soundManager.playEffect("enemy die");
             this.playerManager.gainScore(
                 ENEMYSCORELIST[this.enemyList[enemy_name].size]
             );
+        } else {
+            this.enemyInterval += PENALTYINTERVAL;
+            this.playerManager.hurt();
+        }
+        console.log("enemy" + this.enemyInterval);
     }
 
     checkBound() {
         this.activedEnemy.forEach((enemy_name) => {
             if (this.enemyList[enemy_name].checkBoundary(REMOVEBOUNDARY)) {
                 this.killEnemy(enemy_name, true);
-                this.playerManager.hurt();
             }
         });
     }
@@ -200,10 +217,16 @@ class EnemyManager {
             this.damage = 1;
         });
         this.eventEmitter.on("elf ult", () => {
+            this.soundManager.playEffect("elf skill");
             const allEnemy = this.activedEnemy.slice();
             allEnemy.forEach((enemy_name) => {
                 this.killEnemy(enemy_name);
             });
+        });
+        this.eventEmitter.on("set font", (font) => {
+            for (let enemy_name in this.enemyList) {
+                this.enemyList[enemy_name].text.setFontFamily(font);
+            }
         });
     }
 
