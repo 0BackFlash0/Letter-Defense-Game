@@ -11,9 +11,7 @@ module.exports = {
         path: path.resolve(process.cwd(), "dist"),
         filename: "bundle.min.js",
         clean: {
-            keep(asset) {
-                return asset.includes(".git");
-            },
+            keep: /\.git$/,
         },
     },
     module: {
